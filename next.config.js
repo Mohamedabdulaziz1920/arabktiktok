@@ -1,18 +1,21 @@
+const { i18n } = require('./next-i18next.config');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  i18n,
   webpack: (config, { isServer }) => {
-    // 👇 عطّل مكتبة canvas من أنه يبني في بيئة Vercel
+    // عطّل مكتبة canvas في بيئة Vercel
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         canvas: false,
-      }
+      };
     } else {
-      config.externals = [...(config.externals || []), 'canvas']
+      config.externals = [...(config.externals || []), 'canvas'];
     }
 
-    return config
+    return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
