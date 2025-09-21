@@ -1,13 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack: (config, { isServer }) => {
-        // Add a rule to handle the canvas.node binary module
-        config.module.rules.push({ test: /\.node$/, use: 'raw-loader' });
-    
-        // Exclude canvas from being processed by Next.js in the browser
-        if (!isServer) config.externals.push('canvas');
-        return config;
-    },
+  webpack: (config, { isServer }) => {
+    // 👇 عطّل مكتبة canvas من أنه يبني في بيئة Vercel
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        canvas: false,
+      }
+    } else {
+      config.externals = [...(config.externals || []), 'canvas']
+    }
+
+    return config
+  },
 }
 
 module.exports = nextConfig
